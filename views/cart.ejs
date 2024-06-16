@@ -1,0 +1,136 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+</head>
+<style>
+    .f-size {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">ZakMart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/products">Home</a>
+                    </li>
+                    <% if(user){ %>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/profile">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/cart">Cart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/logout">Log Out</a>
+                        </li>
+                        <% } else{ %>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/signup">Sign Up</a>
+                            </li>
+                        <% } %>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br>
+    <table class="table">
+        <tr>
+            <td>
+                <div style="text-align: center;">
+                    <h1>Cart Items</h1>
+                </div>
+                <table class="table container">
+                    <thead>
+                        <tr>
+                            <th class="f-size" scope="col">Product ID</th>
+                            <th class="f-size" scope="col">Order Name</th>
+                            <th class="f-size" scope="col">Order Price</th>
+                            <th class="f-size" scope="col">Quantity</th>
+                            <th class="f-size" scope="col">Sub-Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let item_count=0 %>
+                        <% let cost=0 %>
+                        <% results.forEach(element => { %>
+                            <% item_count+=element.quantity %>
+                            <% cost+=(element.quantity * element.price) %>
+                            <tr>
+                                <th class="f-size" scope="row"><%=element.order_id%></th>
+                                <td class="f-size">
+                                    <b><%=element.prod_name%></b>
+                                </td>
+                                <td class="f-size">
+                                    <b>Rs <%=element.price%></b>
+                                </td>
+                                <td>
+                                    <a href="/updatequantity?act=increase&pid=<%=element.prod_id%>" style='text-decoration:none;'>
+                                        <button class="btn btn-primary">+</button>
+                                    </a>
+                                    <b class='f-size'><%=element.quantity%></b>&nbsp
+                                    <a href="/updatequantity?act=decrease&pid=<%=element.prod_id%>" style='text-decoration:none;'>
+                                        <button class="btn btn-danger">-</button>
+                                    </a>
+                                </td>
+                                <td class="f-size">
+                                    <b>Rs <%=element.quantity  * element.price%></b>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </td>
+            <td>
+                <div class="d-grid gap-3">
+                    <h1>Payment</h1>
+                    <div style="font-size:20px">
+                        <span><b>Total items:</b></span>
+                        <span style="color:brown"> <%= item_count%></span>
+                    </div>
+
+                    <div style="font-size:20px">
+                        <span><b>Total Price:</b></span>
+                        <span style="color:brown"><%=cost %></span>
+                    </div>
+
+                    <div class="d-grid gap-3 col-8 mx-auto">
+                        <a href="/checkout">
+
+                            <button style="width: 100%;" class="btn btn-warning" type="button">Proceed To Checkout</button>
+                        </a>
+                        <a href="/clear">
+                            <button style="width: 100%;" class="btn btn-danger" type="button">Clear Cart</button>
+                        </a>
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+
+
+    </table>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+</html>

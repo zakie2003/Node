@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPDATE</title>
+</head>
+<body>
+    <% let id=val %>
+    <center>
+        <h1>Update</h1>
+
+        <form action="./update/<%=id%>" method="post">
+            <input type="text" placeholder="Name" name="name">
+            <input type="text" placeholder="Age" name="age">
+            <input type="hidden" name="id" value=<%=id%>>
+            <button type="submit">Update</button>
+        </form>
+    </center>
+</body>
+</html>

@@ -4,7 +4,7 @@ const path=require("path");
 const conn=require("./connection");
 const bodyParser = require("body-parser"); 
 const session=require("express-session");
-const alrt=require("alert");
+
 
 app.set("render engine","ejs");
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -1,7 +1,7 @@
 const express=require("express");
 const app=express();
 const path=require("path");
-const conn=require("../connection");
+const conn=require("./connection");
 const bodyParser = require("body-parser"); 
 const session=require("express-session");
 const alrt=require("alert");

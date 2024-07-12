@@ -5,53 +5,60 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login Page</title>
-    <link rel="stylesheet" href="./CSS/nav.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
-<style>
-    .navbar-custom {
-        background-color: rgb(73, 101, 255);
-    }
-    .button{
-        background-color: yellow;
-    }
-    .button:hover{
-        background-color: black;
-        color:white;
-    }
-</style>
-<body>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .custom_nav {
+            background-color: rgb(73, 101, 255);
+        }
 
-    <nav class="navbar-custom navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">ZakMart</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        .button {
+            background-color: yellow;
+        }
+
+        .button:hover {
+            background-color: black;
+            color: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2563eb; /* Tailwind blue-600 */
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5); /* Tailwind blue-600 */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-gray-100">
+
+    <nav class="bg-blue-600 dark:bg-gray-800 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a class="text-white text-lg font-bold" href="#">ZakMart</a>
+            <button class="lg:hidden text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon">☰</span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/products"><button class="btn button">Home</button></a>
+            <div class="hidden lg:flex" id="navbarNav">
+                <ul class="flex space-x-4">
+                    <li>
+                        <a href="/products"><button class="btn bg-yellow-400 hover:bg-black hover:text-white text-black py-2 px-4 rounded">Home</button></a>
                     </li>
 
                     <% if(user){ %>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/profile"><button class="btn button">Profile</button></a>
+                        <li>
+                            <a href="/profile"><button class="btn bg-yellow-400 hover:bg-black hover:text-white text-black py-2 px-4 rounded">Profile</button></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/cart"><button class="btn button">Cart</button></a>
+                        <li>
+                            <a href="/cart"><button class="btn bg-yellow-400 hover:bg-black hover:text-white text-black py-2 px-4 rounded">Cart</button></a>
                         </li>                            
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/logout"><button class="btn button">Log Out</button></a>
+                        <li>
+                            <a href="/logout"><button class="btn bg-yellow-400 hover:bg-black hover:text-white text-black py-2 px-4 rounded">Log Out</button></a>
                         </li>
                     <% } else{ %>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/"><button class="btn button">Login</button></a>
+                        <li>
+                            <a href="/"><button class="btn bg-yellow-400 hover:bg-black hover:text-white text-black py-2 px-4 rounded">Login</button></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/signup"><button class="btn button">Sign Up</button></a>
+                        <li>
+                            <a href="/signup"><button class="btn bg-yellow-400 hover:bg-black hover:text-white text-black py-2 px-4 rounded">Sign Up</button></a>
                         </li>
                     <% } %>
 
@@ -59,41 +66,37 @@
             </div>
         </div>
     </nav>
+
     <% if (msg==="Bad Credentials") { %>
-        <div class="alert alert-danger" role="alert">
-            Bad Credentials,Enter Correct Id or Password
-          </div>
-     <% } %>
-     <% if (msg==="Incorrect Input") { %>
-        <div class="alert alert-danger" role="alert">
+        <div class="bg-red-600 text-white p-4 rounded-lg my-4 mx-auto w-11/12 md:w-1/2">
+            Bad Credentials, Enter Correct Id or Password
+        </div>
+    <% } %>
+    <% if (msg==="Incorrect Input") { %>
+        <div class="bg-red-600 text-white p-4 rounded-lg my-4 mx-auto w-11/12 md:w-1/2">
             Incorrect Input
-          </div>
-     <% } %>
-    <div style="height: 100vh;">
-        <br>
-        <center>
-            <h1>Login Page</h1>
-        </center>
-        <div class="container">
+        </div>
+    <% } %>
+
+    <div class="container mx-auto py-8">
+        <h1 class="text-center text-3xl mb-6">Login Page</h1>
+        <div class="w-full max-w-md mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
             <form action="./login" method="POST">
-                <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">UserID</label>
-                    <input name="uid" name="uid" type="text" class="form-control" id="exampleFormControlInput1" placeholder="User Id">
+                <div class="mb-4">
+                    <label for="uid" class="block text-gray-300 text-sm font-bold mb-2">UserID</label>
+                    <input name="uid" type="text" class="form-control w-full p-2 rounded bg-gray-700 text-gray-100 focus:border-blue-600" id="uid" placeholder="User Id">
                 </div>
-                <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Password</label>
-                    <input  name="pass" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Password">
+                <div class="mb-4">
+                    <label for="pass" class="block text-gray-300 text-sm font-bold mb-2">Password</label>
+                    <input name="pass" type="password" class="form-control w-full p-2 rounded bg-gray-700 text-gray-100 focus:border-blue-600" id="pass" placeholder="Password">
                 </div>
-                <center>
-                    <button class="btn btn-primary">Login</button>
-                </center>
+                <div class="text-center">
+                    <button class="btn bg-yellow-400 hover:bg-black hover:text-white p-2 rounded">Login</button>
+                </div>
             </form>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </body>
 
 </html>

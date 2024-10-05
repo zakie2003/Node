@@ -200,38 +200,89 @@ app.get("/edit",(req,res)=>{
     }
 })
 
-app.post("/update",(req,res)=>{
+app.post("/update", (req, res) => {
+    if (req.session.authorized) {
+        const item_check = `SELECT * FROM user WHERE userid='${req.body.uid}';`;
 
-    if(req.session.authorized){
-        const item_check=`select * from user where userid='${req.body.uid}';`;
-        conn.execute(item_check,(err,result,fields)=>{
-            console.log(result);
-            if(result.length===0){
-                const query=`update user set userid='${req.body.uid}',phone_num='${req.body.phone}',email='${req.body.email}',password='${req.body.pass}' where userid='${req.session.user}'`;
-                const ordr_query=`update orders set user='${req.body.uid}' where user='${req.session.user}'`;
-                const cart_query=`update cart set user='${req.body.uid}' where user='${req.session.user}'`;
-                conn.execute(query);
-                conn.execute(ordr_query);
-                conn.execute(cart_query);
-                req.session.user=req.body.uid;
-                req.session.pass=req.body.pass;
-                app.locals.user=req.body.uid;
-                app.locals.pass=req.body.pass;
-                app.locals.email=req.body.email;
-                app.locals.number=req.body.phone;
+        conn.beginTransaction((err) => {
+            if (err) {
+                console.error("Transaction Error: ", err);
+                return res.redirect("/profile");
             }
-            else{
-                res.redirect("/profile");
-            }
-            res.redirect("/profile");
-        })
 
-    }
-    else{
+            conn.execute(item_check, (err, result, fields) => {
+                if (err) {
+                    return conn.rollback(() => {
+                        console.error("Error executing query: ", err);
+                        return res.redirect("/profile");
+                    });
+                }
+
+                if (result.length === 0) {
+                    // Update user table
+                    const update_user_query = `UPDATE user SET userid='${req.body.uid}', phone_num='${req.body.phone}', email='${req.body.email}', password='${req.body.pass}' WHERE userid='${req.session.user}'`;
+                    
+                    // Update orders and cart with the new userid
+                    const update_orders_query = `UPDATE orders SET user='${req.body.uid}' WHERE user='${req.session.user}'`;
+                    const update_cart_query = `UPDATE cart SET user='${req.body.uid}' WHERE user='${req.session.user}'`;
+
+                    conn.execute(update_user_query, (err) => {
+                        if (err) {
+                            return conn.rollback(() => {
+                                console.error("User update failed: ", err);
+                                return res.redirect("/profile");
+                            });
+                        }
+
+                        conn.execute(update_orders_query, (err) => {
+                            if (err) {
+                                return conn.rollback(() => {
+                                    console.error("Order update failed: ", err);
+                                    return res.redirect("/profile");
+                                });
+                            }
+
+                            conn.execute(update_cart_query, (err) => {
+                                if (err) {
+                                    return conn.rollback(() => {
+                                        console.error("Cart update failed: ", err);
+                                        return res.redirect("/profile");
+                                    });
+                                }
+
+                                // Commit the transaction
+                                conn.commit((err) => {
+                                    if (err) {
+                                        return conn.rollback(() => {
+                                            console.error("Commit failed: ", err);
+                                            return res.redirect("/profile");
+                                        });
+                                    }
+
+                                    // Update session data and locals
+                                    req.session.user = req.body.uid;
+                                    req.session.pass = req.body.pass;
+                                    app.locals.user = req.body.uid;
+                                    app.locals.pass = req.body.pass;
+                                    app.locals.email = req.body.email;
+                                    app.locals.number = req.body.phone;
+
+                                    res.redirect("/profile");
+                                });
+                            });
+                        });
+                    });
+                } else {
+                    // If user ID already exists
+                    return res.redirect("/profile");
+                }
+            });
+        });
+    } else {
         res.redirect("/");
     }
+});
 
-})
 
 app.get("/updatequantity",(req,res)=>{
     if(req.session.authorized){
